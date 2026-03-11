@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>EthioGebeya Dashboard</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+<body>
+
+<header>
+
+<h1>EthioGebeya Marketplace</h1>
+
+<div id="userBadge"></div>
+
+<button id="logoutBtn">Logout</button>
+
+</header>
+
+
+<div class="container">
+
+<aside class="sidebar">
+
+<button data-view="overview">Overview</button>
+
+<button data-view="products">Products</button>
+
+<button data-view="orders">Orders</button>
+
+<button data-view="stores">Store</button>
+
+<button data-view="reviews">Reviews</button>
+
+<button data-view="chat">Live Chat</button>
+
+<button data-view="delivery">Delivery</button>
+
+<button data-view="analytics">Analytics</button>
+
+<button data-view="admin">Admin</button>
+
+</aside>
+
+
+<main id="view">
+
+<section id="overviewView"></section>
+
+<section id="productsView"></section>
+
+<section id="ordersView"></section>
+
+<section id="storesView"></section>
+
+<section id="reviewsView"></section>
+
+<section id="chatView"></section>
+
+<section id="deliveryView"></section>
+
+<section id="analyticsView"></section>
+
+<section id="adminView"></section>
+
+</main>
+
+</div>
+
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/products.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/reviews.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/delivery.js"></script>
+<script src="js/analytics.js"></script>
+
+</body>
+</html>
