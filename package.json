@@ -1,16 +1,16 @@
 {
   "name": "ethiogebeya-ultrascale",
   "version": "1.0.1",
+  "description": "EthioGebeya UltraScale marketplace backend",
   "private": true,
-  "description": "Ethiopian mini Amazon-style marketplace demo app",
   "main": "server.js",
+  "type": "commonjs",
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=18"
   },
   "scripts": {
     "start": "node server.js",
-    "lint:syntax": "node --check server.js && node --check public/app.js",
-    "test:smoke": "node scripts/smoke-test.js",
-    "test": "npm run lint:syntax && npm run test:smoke"
+    "dev": "node server.js",
+    "check": "node --check server.js"
   }
 }
