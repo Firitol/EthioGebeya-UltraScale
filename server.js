@@ -601,7 +601,7 @@ const server = http.createServer((req, res) => {
     res.end(JSON.stringify(featuredProducts));
     return;
   }
-}
+
   const requestedPath = req.url === "/" ? "/index.html" : req.url;
   const safePath = path.normalize(requestedPath).replace(/^\.+/, "");
   const filePath = path.join(publicDir, safePath);
