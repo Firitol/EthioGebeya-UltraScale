@@ -1,12 +1,16 @@
+// ---------- STATE ----------
 const state = {
   token: localStorage.getItem("token") || "",
   user: JSON.parse(localStorage.getItem("user") || "null"),
   products: [],
+  featuredProducts: [],
   cart: []
 };
 
+// ---------- ELEMENTS ----------
 const el = {
-  productsGrid: document.getElementById("productsGrid"),
+  productsGrid: document.getElementById("productsGrid"),       // main product list
+  featuredGrid: document.getElementById("featuredProducts"),   // featured section
   cart: document.getElementById("cart"),
   registerForm: document.getElementById("registerForm"),
   loginForm: document.getElementById("loginForm"),
@@ -24,7 +28,7 @@ const el = {
   reloadProducts: document.getElementById("reloadProducts")
 };
 
-// ---------- Toast Notifications ----------
+// ---------- TOAST ----------
 function notify(message, isError = false) {
   el.toast.textContent = message;
   el.toast.style.display = "block";
@@ -32,7 +36,7 @@ function notify(message, isError = false) {
   setTimeout(() => (el.toast.style.display = "none"), 2200);
 }
 
-// ---------- API Helper ----------
+// ---------- API HELPER ----------
 async function api(path, options = {}) {
   const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
   if (state.token) headers.Authorization = `Bearer ${state.token}`;
@@ -42,7 +46,7 @@ async function api(path, options = {}) {
   return data;
 }
 
-// ---------- Auth UI ----------
+// ---------- AUTH ----------
 function syncAuthUI() {
   const user = state.user;
   el.userBadge.textContent = user ? `${user.name} (${user.role})` : "Guest";
@@ -69,9 +73,9 @@ function clearAuth() {
   syncAuthUI();
 }
 
-// ---------- Products ----------
-function renderProducts() {
-  el.productsGrid.innerHTML = state.products
+// ---------- RENDER PRODUCTS ----------
+function renderProducts(list, container) {
+  container.innerHTML = list
     .map(
       (p) => `<article class="card">
         <div class="emoji">${p.image || "📦"}</div>
@@ -79,26 +83,28 @@ function renderProducts() {
         <div class="price">ETB ${p.price.toLocaleString()}</div>
         <div class="meta">${p.category} • ${p.city}</div>
         <div class="meta">Stock: ${p.stock}</div>
-        <button class="buy" data-id="${p.id}">Add to Cart</button>
+        ${container === el.productsGrid ? `<button class="buy" data-id="${p.id}">Add to Cart</button>` : ""}
       </article>`
     )
     .join("");
 
-  // Add to cart buttons
-  Array.from(el.productsGrid.querySelectorAll("button.buy")).forEach((button) => {
-    button.addEventListener("click", async () => {
-      if (!state.user) return notify("Please login first", true);
-      try {
-        await api("/api/cart/items", { method: "POST", body: JSON.stringify({ productId: button.dataset.id, quantity: 1 }) });
-        await loadCart();
-        notify("Added to cart");
-      } catch (error) {
-        notify(error.message, true);
-      }
+  if (container === el.productsGrid) {
+    Array.from(container.querySelectorAll("button.buy")).forEach((button) => {
+      button.addEventListener("click", async () => {
+        if (!state.user) return notify("Please login first", true);
+        try {
+          await api("/api/cart/items", { method: "POST", body: JSON.stringify({ productId: button.dataset.id, quantity: 1 }) });
+          await loadCart();
+          notify("Added to cart");
+        } catch (error) {
+          notify(error.message, true);
+        }
+      });
     });
-  });
+  }
 }
 
+// ---------- LOAD PRODUCTS ----------
 async function loadProducts() {
   try {
     const params = new URLSearchParams();
@@ -106,13 +112,24 @@ async function loadProducts() {
     if (el.categoryFilter.value) params.set("category", el.categoryFilter.value);
     const data = await api(`/api/products?${params.toString()}`);
     state.products = data.items;
-    renderProducts();
+    renderProducts(state.products, el.productsGrid);
   } catch (error) {
     notify(error.message, true);
   }
 }
 
-// ---------- Cart ----------
+// ---------- LOAD FEATURED PRODUCTS ----------
+async function loadFeaturedProducts() {
+  try {
+    const data = await api("/api/featured-products");
+    state.featuredProducts = data.items || data; // support simple array
+    renderProducts(state.featuredProducts, el.featuredGrid);
+  } catch (error) {
+    el.featuredGrid.innerHTML = `<p class="warn">${error.message}</p>`;
+  }
+}
+
+// ---------- CART ----------
 function renderCart() {
   if (!state.user) {
     el.cart.innerHTML = "<p>Login to manage your cart.</p>";
@@ -155,7 +172,7 @@ async function loadCart() {
   }
 }
 
-// ---------- Seller Orders ----------
+// ---------- SELLER DASH ----------
 async function loadSellerOrders() {
   if (!state.user || (state.user.role !== "seller" && state.user.role !== "admin")) return;
   try {
@@ -166,7 +183,7 @@ async function loadSellerOrders() {
   }
 }
 
-// ---------- Admin Metrics ----------
+// ---------- ADMIN DASH ----------
 async function loadAdminMetrics() {
   if (!state.user || state.user.role !== "admin") return;
   try {
@@ -177,7 +194,7 @@ async function loadAdminMetrics() {
   }
 }
 
-// ---------- Event Listeners ----------
+// ---------- EVENT LISTENERS ----------
 el.registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const fd = new FormData(el.registerForm);
@@ -239,9 +256,10 @@ el.reloadProducts.addEventListener("click", loadProducts);
 el.searchInput.addEventListener("input", loadProducts);
 el.categoryFilter.addEventListener("change", loadProducts);
 
-// ---------- Initial Load ----------
+// ---------- INITIAL LOAD ----------
 syncAuthUI();
 loadProducts();
+loadFeaturedProducts();
 loadCart();
 loadSellerOrders();
 loadAdminMetrics();
