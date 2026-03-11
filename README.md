@@ -1,46 +1,24 @@
-\# EthioGebeya
+# EthioGebeya
 
+Ethiopian Amazon-style marketplace prototype.
 
+## Features
 
-Ethiopian Amazon-style marketplace.
+- Multi-vendor marketplace homepage
+- Ethiopian-themed hero and categories
+- Featured products powered by a local API
+- Local payments highlight (Telebirr / CBE Birr)
+- Seller and delivery-oriented messaging
 
+## Tech Stack
 
+- Frontend: HTML, CSS, Vanilla JavaScript
+- Backend: Node.js built-in HTTP server
 
-Features
+## Run locally
 
+```bash
+node server.js
+```
 
-
-✔ Multi vendor marketplace  
-
-✔ Ethiopian delivery system  
-
-✔ Telebirr / CBE Birr payment options  
-
-✔ Seller dashboard  
-
-✔ Product management  
-
-✔ Order system  
-
-
-
-Tech Stack
-
-
-
-Frontend
-
-React + Tailwind
-
-
-
-Backend
-
-Node + Express
-
-
-
-Database
-
-MongoDB
-
+Then open `http://localhost:3000`.
