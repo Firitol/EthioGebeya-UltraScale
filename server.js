@@ -7,7 +7,9 @@ const { URL } = require("url");
 
 const PORT = process.env.PORT || 3000;
 const publicDir = path.join(__dirname, "public");
-const dataDir = path.join(__dirname, "data");
+const dataDir = process.env.RENDER
+  ? path.join("/tmp", "data")
+  : path.join(__dirname, "data");
 const dbPath = path.join(dataDir, "db.json");
 const SECRET = process.env.APP_SECRET || "ethiogebeya-ultrascale-secret-change-me";
 const TOKEN_TTL_SECONDS = 60 * 60 * 8;
