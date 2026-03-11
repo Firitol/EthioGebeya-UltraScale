@@ -24,6 +24,22 @@ A more complete Ethiopian marketplace platform inspired by Amazon, with multi-ro
 - Admin: `admin@ethiogebeya.com / Admin@123`
 - Seller: `seller@ethiogebeya.com / Seller@123`
 - Customer: `customer@ethiogebeya.com / Customer@123`
+# EthioGebeya
+
+Ethiopian Amazon-style marketplace prototype.
+
+## Features
+
+- Multi-vendor marketplace homepage
+- Ethiopian-themed hero and categories
+- Featured products powered by a local API
+- Local payments highlight (Telebirr / CBE Birr)
+- Seller and delivery-oriented messaging
+
+## Tech Stack
+
+- Frontend: HTML, CSS, Vanilla JavaScript
+- Backend: Node.js built-in HTTP server
 
 ## Run locally
 
@@ -47,3 +63,4 @@ Open `http://localhost:3000`.
 - `GET /api/seller/orders` (seller/admin)
 - `GET /api/admin/metrics` (admin)
 - `GET /api/health`
+Then open `http://localhost:3000`.
