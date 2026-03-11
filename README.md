@@ -1,6 +1,7 @@
 # EthioGebeya UltraScale
 
 A complete Ethiopian marketplace platform inspired by Amazon, with multi-role workflows, checkout, and built-in security controls.
+A more complete Ethiopian marketplace platform inspired by Amazon, with multi-role workflows, checkout, and built-in security controls.
 
 ## What is included
 
@@ -40,6 +41,31 @@ npm run lint:syntax
 npm run test:smoke
 ```
 
+# EthioGebeya
+
+Ethiopian Amazon-style marketplace prototype.
+
+## Features
+
+- Multi-vendor marketplace homepage
+- Ethiopian-themed hero and categories
+- Featured products powered by a local API
+- Local payments highlight (Telebirr / CBE Birr)
+- Seller and delivery-oriented messaging
+
+## Tech Stack
+
+- Frontend: HTML, CSS, Vanilla JavaScript
+- Backend: Node.js built-in HTTP server
+
+## Run locally
+
+```bash
+node server.js
+```
+
+Open `http://localhost:3000`.
+
 ## API overview
 
 - `POST /api/auth/register`
@@ -54,3 +80,4 @@ npm run test:smoke
 - `GET /api/seller/orders` (seller/admin)
 - `GET /api/admin/metrics` (admin)
 - `GET /api/health`
+Then open `http://localhost:3000`.

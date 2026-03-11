@@ -1,16 +1,13 @@
 {
   "name": "ethiogebeya-ultrascale",
-  "version": "1.0.1",
-  "private": true,
+  "version": "1.0.0",
   "description": "Ethiopian mini Amazon-style marketplace demo app",
   "main": "server.js",
-  "engines": {
-    "node": ">=22.0.0"
-  },
   "scripts": {
     "start": "node server.js",
     "lint:syntax": "node --check server.js && node --check public/app.js",
     "test:smoke": "node scripts/smoke-test.js",
     "test": "npm run lint:syntax && npm run test:smoke"
+    "start": "node server.js"
   }
 }
