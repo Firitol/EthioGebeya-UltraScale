@@ -1,46 +1,56 @@
-\# EthioGebeya
+# EthioGebeya UltraScale
 
+A complete Ethiopian marketplace platform inspired by Amazon, with multi-role workflows, checkout, and built-in security controls.
 
+## What is included
 
-Ethiopian Amazon-style marketplace.
+- **Customer features**: browse products, search/filter, add/remove cart items, checkout, and order history API.
+- **Seller features**: authenticated seller dashboard, create products, and view seller-related orders.
+- **Admin features**: platform metrics endpoint and audit visibility support.
+- **Security**:
+  - password hashing (PBKDF2)
+  - signed auth tokens (HMAC)
+  - role-based access control
+  - payload size limits + JSON validation
+  - request rate limiting
+  - security headers (CSP, frame denial, no sniff, etc.)
+- **Operational basics**:
+  - persistent JSON datastore (`data/db.json`)
+  - product query caching for common list requests
+  - health endpoint (`/api/health`)
 
+## Demo credentials
 
+- Admin: `admin@ethiogebeya.com / Admin@123`
+- Seller: `seller@ethiogebeya.com / Seller@123`
+- Customer: `customer@ethiogebeya.com / Customer@123`
 
-Features
+## Run locally
 
+```bash
+npm start
+```
 
+Open `http://localhost:3000`.
 
-✔ Multi vendor marketplace  
+## Validation
 
-✔ Ethiopian delivery system  
+```bash
+npm run lint:syntax
+npm run test:smoke
+```
 
-✔ Telebirr / CBE Birr payment options  
+## API overview
 
-✔ Seller dashboard  
-
-✔ Product management  
-
-✔ Order system  
-
-
-
-Tech Stack
-
-
-
-Frontend
-
-React + Tailwind
-
-
-
-Backend
-
-Node + Express
-
-
-
-Database
-
-MongoDB
-
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/products`
+- `POST /api/seller/products` (seller/admin)
+- `GET /api/cart` (auth)
+- `POST /api/cart/items` (auth)
+- `DELETE /api/cart/items/:productId` (auth)
+- `POST /api/orders/checkout` (auth)
+- `GET /api/orders/my` (auth)
+- `GET /api/seller/orders` (seller/admin)
+- `GET /api/admin/metrics` (admin)
+- `GET /api/health`
