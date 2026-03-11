@@ -628,3 +628,4 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`EthioGebeya running at http://localhost:${PORT}`);
 });
+}
