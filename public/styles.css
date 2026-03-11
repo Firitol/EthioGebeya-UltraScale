@@ -1,0 +1,40 @@
+:root {
+  --green: #177245;
+  --yellow: #f2c037;
+  --bg: #f4f7f5;
+  --ink: #1f2937;
+  --danger: #b91c1c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+.hero { background: linear-gradient(135deg, #0f5132, #0b2a1d); color: #fff; padding-bottom: 2rem; }
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+.nav h1 span { color: var(--yellow); }
+.auth-strip { display: flex; gap: .5rem; align-items: center; }
+.hero-body { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; padding: 1rem 0; }
+.chips span { display: inline-block; background: rgba(255,255,255,.15); padding: .3rem .6rem; border-radius: 999px; margin-right: .4rem; margin-top: .6rem; }
+.layout { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 1rem; margin: 1rem auto 2rem; align-items: start; }
+.panel { background: #fff; border-radius: .9rem; padding: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,.07); }
+.panel.wide { grid-column: span 1; }
+.row, .row-between { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+.row-between { justify-content: space-between; }
+.stack { display: grid; gap: .5rem; margin-bottom: 1rem; }
+input, select, button { padding: .65rem .7rem; border-radius: .55rem; border: 1px solid #d1d5db; }
+button { border: none; background: var(--green); color: #fff; font-weight: 600; cursor: pointer; }
+button.ghost { background: #e5e7eb; color: #111827; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: .8rem; }
+.card { border: 1px solid #e5e7eb; border-radius: .8rem; padding: .8rem; }
+.card h4 { margin: .4rem 0; }
+.card .meta { color: #4b5563; font-size: .9rem; }
+.price { color: var(--green); font-weight: 700; }
+.card .buy { width: 100%; margin-top: .5rem; }
+#cart .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: .4rem 0; }
+#toast { position: fixed; right: 1rem; bottom: 1rem; background: #111827; color: #fff; padding: .6rem .8rem; border-radius: .6rem; display: none; }
+code { background: rgba(0,0,0,.08); padding: .1rem .3rem; border-radius: .3rem; }
+pre { background: #0f172a; color: #86efac; padding: .7rem; border-radius: .6rem; overflow: auto; }
+.warn { color: var(--danger); font-weight: 600; }
+@media (max-width: 1040px) {
+  .layout { grid-template-columns: 1fr; }
+  .hero-body { grid-template-columns: 1fr; }
+}
