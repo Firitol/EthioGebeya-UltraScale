@@ -9,8 +9,6 @@
     "node": ">=18"
   },
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "check": "node --check server.js"
+    "start": "node server.js"
   }
 }
