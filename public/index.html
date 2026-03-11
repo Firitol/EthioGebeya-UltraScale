@@ -3,11 +3,115 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EthioGebeya UltraScale</title>
     <title>EthioGebeya - Ethiopian Marketplace</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="hero">
+      <div class="container nav">
+        <h1>EthioGebeya <span>UltraScale</span></h1>
+        <div class="auth-strip">
+          <span id="userBadge">Guest</span>
+          <button id="logoutBtn" class="ghost" hidden>Logout</button>
+        </div>
+      </div>
+      <div class="container hero-body">
+        <div>
+          <h2>Secure Ethiopian Marketplace Platform</h2>
+          <p>Multi-vendor commerce with role-based dashboards, protected checkout, and local payment options.</p>
+          <div class="chips">
+            <span>Telebirr</span>
+            <span>CBE Birr</span>
+            <span>Cash on Delivery</span>
+          </div>
+        </div>
+        <div class="panel credentials">
+          <h3>Demo Accounts</h3>
+          <p>Admin: <code>admin@ethiogebeya.com / Admin@123</code></p>
+          <p>Seller: <code>seller@ethiogebeya.com / Seller@123</code></p>
+          <p>Customer: <code>customer@ethiogebeya.com / Customer@123</code></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="container layout">
+      <section class="panel">
+        <h3>Authentication</h3>
+        <form id="registerForm" class="stack">
+          <h4>Register</h4>
+          <input name="name" placeholder="Full name" required />
+          <input name="email" type="email" placeholder="Email" required />
+          <input name="password" type="password" placeholder="Password (8+ chars)" required minlength="8" />
+          <select name="role">
+            <option value="customer">Customer</option>
+            <option value="seller">Seller</option>
+          </select>
+          <button>Create account</button>
+        </form>
+        <form id="loginForm" class="stack">
+          <h4>Login</h4>
+          <input name="email" type="email" placeholder="Email" required />
+          <input name="password" type="password" placeholder="Password" required />
+          <button>Login</button>
+        </form>
+      </section>
+
+      <section class="panel wide">
+        <div class="row-between">
+          <h3>Products</h3>
+          <div class="row">
+            <input id="searchInput" placeholder="Search products" />
+            <select id="categoryFilter">
+              <option value="">All categories</option>
+              <option>Grocery</option>
+              <option>Fashion</option>
+              <option>Appliances</option>
+              <option>Home</option>
+            </select>
+            <button id="reloadProducts" class="ghost">Refresh</button>
+          </div>
+        </div>
+        <div id="products" class="grid"></div>
+      </section>
+
+      <section class="panel">
+        <h3>Cart & Checkout</h3>
+        <div id="cart"></div>
+        <form id="checkoutForm" class="stack">
+          <select name="paymentMethod" required>
+            <option value="">Payment method</option>
+            <option>Telebirr</option>
+            <option>CBE Birr</option>
+            <option>Cash on Delivery</option>
+          </select>
+          <input name="address" placeholder="Delivery address" required />
+          <button>Checkout</button>
+        </form>
+      </section>
+
+      <section class="panel" id="sellerPanel" hidden>
+        <h3>Seller Dashboard</h3>
+        <form id="productForm" class="stack">
+          <input name="name" placeholder="Product name" required />
+          <input name="description" placeholder="Description" required />
+          <input name="price" type="number" min="1" placeholder="Price" required />
+          <input name="stock" type="number" min="0" placeholder="Stock" required />
+          <input name="category" placeholder="Category" required />
+          <input name="city" placeholder="City" required />
+          <input name="image" placeholder="Emoji" maxlength="2" />
+          <button>Add Product</button>
+        </form>
+        <div id="sellerOrders"></div>
+      </section>
+
+      <section class="panel" id="adminPanel" hidden>
+        <h3>Admin Metrics</h3>
+        <pre id="metrics"></pre>
+      </section>
+    </main>
+
+    <div id="toast"></div>
       <nav>
         <h1>EthioGebeya</h1>
         <ul>

@@ -1,5 +1,6 @@
 # EthioGebeya UltraScale
 
+A complete Ethiopian marketplace platform inspired by Amazon, with multi-role workflows, checkout, and built-in security controls.
 A more complete Ethiopian marketplace platform inspired by Amazon, with multi-role workflows, checkout, and built-in security controls.
 
 ## What is included
@@ -24,6 +25,22 @@ A more complete Ethiopian marketplace platform inspired by Amazon, with multi-ro
 - Admin: `admin@ethiogebeya.com / Admin@123`
 - Seller: `seller@ethiogebeya.com / Seller@123`
 - Customer: `customer@ethiogebeya.com / Customer@123`
+
+## Run locally
+
+```bash
+npm start
+```
+
+Open `http://localhost:3000`.
+
+## Validation
+
+```bash
+npm run lint:syntax
+npm run test:smoke
+```
+
 # EthioGebeya
 
 Ethiopian Amazon-style marketplace prototype.
