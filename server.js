@@ -14,7 +14,7 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-
+app.use(express.static("frontend"))
 // Rate limiting
 app.use(rateLimit({
   windowMs: 60_000,
