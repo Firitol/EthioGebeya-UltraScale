@@ -8,5 +8,6 @@
     "lint:syntax": "node --check server.js && node --check public/app.js",
     "test:smoke": "node scripts/smoke-test.js",
     "test": "npm run lint:syntax && npm run test:smoke"
+    "start": "node server.js"
   }
 }
