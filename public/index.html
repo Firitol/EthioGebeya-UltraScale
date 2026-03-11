@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EthioGebeya UltraScale</title>
-    <title>EthioGebeya - Ethiopian Marketplace</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- Header & Hero -->
     <header class="hero">
       <div class="container nav">
         <h1>EthioGebeya <span>UltraScale</span></h1>
@@ -16,6 +16,7 @@
           <button id="logoutBtn" class="ghost" hidden>Logout</button>
         </div>
       </div>
+
       <div class="container hero-body">
         <div>
           <h2>Secure Ethiopian Marketplace Platform</h2>
@@ -26,6 +27,7 @@
             <span>Cash on Delivery</span>
           </div>
         </div>
+
         <div class="panel credentials">
           <h3>Demo Accounts</h3>
           <p>Admin: <code>admin@ethiogebeya.com / Admin@123</code></p>
@@ -35,9 +37,12 @@
       </div>
     </header>
 
+    <!-- Main Content -->
     <main class="container layout">
-      <section class="panel">
+      <!-- Auth Panel -->
+      <section class="panel" id="authPanel">
         <h3>Authentication</h3>
+
         <form id="registerForm" class="stack">
           <h4>Register</h4>
           <input name="name" placeholder="Full name" required />
@@ -47,8 +52,9 @@
             <option value="customer">Customer</option>
             <option value="seller">Seller</option>
           </select>
-          <button>Create account</button>
+          <button>Create Account</button>
         </form>
+
         <form id="loginForm" class="stack">
           <h4>Login</h4>
           <input name="email" type="email" placeholder="Email" required />
@@ -57,6 +63,7 @@
         </form>
       </section>
 
+      <!-- Products Panel -->
       <section class="panel wide">
         <div class="row-between">
           <h3>Products</h3>
@@ -72,9 +79,10 @@
             <button id="reloadProducts" class="ghost">Refresh</button>
           </div>
         </div>
-        <div id="products" class="grid"></div>
+        <div id="productsGrid" class="grid"></div>
       </section>
 
+      <!-- Cart & Checkout -->
       <section class="panel">
         <h3>Cart & Checkout</h3>
         <div id="cart"></div>
@@ -90,6 +98,7 @@
         </form>
       </section>
 
+      <!-- Seller Dashboard -->
       <section class="panel" id="sellerPanel" hidden>
         <h3>Seller Dashboard</h3>
         <form id="productForm" class="stack">
@@ -105,63 +114,38 @@
         <div id="sellerOrders"></div>
       </section>
 
+      <!-- Admin Panel -->
       <section class="panel" id="adminPanel" hidden>
         <h3>Admin Metrics</h3>
         <pre id="metrics"></pre>
       </section>
     </main>
 
-    <div id="toast"></div>
-      <nav>
-        <h1>EthioGebeya</h1>
-        <ul>
-          <li>Home</li>
-          <li>Categories</li>
-          <li>Sellers</li>
-          <li>Orders</li>
-          <li>Cart 🛒</li>
-        </ul>
-      </nav>
+    <!-- Highlights Section -->
+    <section class="container highlights">
+      <article>
+        <h3>Multi-vendor Marketplace</h3>
+        <p>Empowering sellers from Addis Ababa to Mekelle.</p>
+      </article>
+      <article>
+        <h3>Local Payments</h3>
+        <p>Pay safely using Telebirr and CBE Birr.</p>
+      </article>
+      <article>
+        <h3>Fast Delivery</h3>
+        <p>Nationwide dispatch with live order updates.</p>
+      </article>
+    </section>
 
-      <div class="hero-content">
-        <h2>Your Ethiopian Mini Amazon</h2>
-        <p>
-          Discover local products from trusted Ethiopian sellers with fast delivery
-          and Telebirr/CBE Birr support.
-        </p>
-        <button>Start Shopping</button>
-      </div>
-    </header>
-
-    <main>
-      <section class="highlights">
-        <article>
-          <h3>Multi-vendor Marketplace</h3>
-          <p>Empowering sellers from Addis Ababa to Mekelle.</p>
-        </article>
-        <article>
-          <h3>Local Payments</h3>
-          <p>Pay safely using Telebirr and CBE Birr.</p>
-        </article>
-        <article>
-          <h3>Fast Delivery</h3>
-          <p>Nationwide dispatch with live order updates.</p>
-        </article>
-      </section>
-
-      <section>
-        <div class="section-title">
-          <h2>Featured Products</h2>
-          <p>Popular choices across Ethiopia</p>
-        </div>
-        <div id="products" class="product-grid"></div>
-      </section>
-    </main>
-
+    <!-- Footer -->
     <footer>
       <p>© 2026 EthioGebeya. Built for Ethiopian commerce.</p>
     </footer>
 
+    <!-- Toast Notifications -->
+    <div id="toast"></div>
+
+    <!-- App Script -->
     <script src="app.js"></script>
   </body>
 </html>
