@@ -23,7 +23,16 @@ router.get("/featured", async (req, res) => {
     res.json(rows);
   } catch (err) { res.status(500).json({ error: "Failed to load featured products" }); }
 });
+router.get("/:id/bulk",async(req,res)=>{
 
+const {rows}=await pool.query(
+"SELECT * FROM bulk_pricing WHERE product_id=$1",
+[req.params.id]
+)
+
+res.json(rows)
+
+})
 // POST /api/products - seller/admin only
 router.post("/", authenticate, requireRole("seller", "admin"), async (req, res) => {
   try {
