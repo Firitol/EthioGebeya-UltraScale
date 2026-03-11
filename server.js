@@ -158,7 +158,11 @@ function verifyToken(token) {
   const [h, b, s] = token.split(".");
   if (!h || !b || !s) return null;
   const expected = crypto.createHmac("sha256", SECRET).update(`${h}.${b}`).digest("base64url");
-  if (!crypto.timingSafeEqual(Buffer.from(s), Buffer.from(expected))) return null;
+  const sigA = Buffer.from(s);
+const sigB = Buffer.from(expected);
+
+if (sigA.length !== sigB.length) return null;
+if (!crypto.timingSafeEqual(sigA, sigB)) return null;
   const payload = JSON.parse(Buffer.from(b, "base64url").toString("utf8"));
   if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) return null;
   return payload;
@@ -522,7 +526,9 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   if (!rateLimit(req, res)) return;
-
+res.setHeader("Access-Control-Allow-Origin", "*");
+res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+res.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS");
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
     if (url.pathname.startsWith("/api/")) {
