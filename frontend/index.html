@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EthioGebeya UltraScale</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f6f7fb;
+color:#1f2937;
+}
+
+header{
+background:#111827;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:18px;
+}
+
+.card{
+background:white;
+border-radius:10px;
+padding:16px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.price{
+font-weight:bold;
+color:#2563eb;
+}
+
+.panel{
+background:white;
+border-radius:10px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.stack input,
+.stack select{
+width:100%;
+padding:8px;
+margin-bottom:10px;
+border-radius:6px;
+border:1px solid #d1d5db;
+}
+
+button{
+padding:8px 12px;
+border-radius:6px;
+border:none;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+button.ghost{
+background:#e5e7eb;
+color:black;
+}
+
+#toast{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#111;
+color:white;
+padding:10px 14px;
+border-radius:6px;
+display:none;
+}
+
+.hidden{
+display:none;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin-bottom:6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<div class="container">
+<h1>EthioGebeya UltraScale</h1>
+<div>
+<span id="userBadge">Guest</span>
+<button id="logoutBtn" class="ghost hidden">Logout</button>
+</div>
+</div>
+</header>
+
+<div class="container">
+
+<div class="panel">
+
+<h3>Authentication</h3>
+
+<form id="registerForm" class="stack">
+
+<input name="name" placeholder="Full name" required>
+
+<input name="email" type="email" placeholder="Email" required>
+
+<input name="password" type="password" minlength="8" placeholder="Password (8+)" required>
+
+<select name="role">
+<option value="customer">Customer</option>
+<option value="seller">Seller</option>
+</select>
+
+<button>Create account</button>
+
+</form>
+
+<form id="loginForm" class="stack">
+
+<input name="email" type="email" placeholder="Email" required>
+
+<input name="password" type="password" placeholder="Password" required>
+
+<button>Login</button>
+
+</form>
+
+</div>
+
+<div class="panel">
+
+<h3>Products</h3>
+
+<input id="searchInput" placeholder="Search products">
+
+<select id="categoryFilter">
+<option value="">All categories</option>
+<option>Grocery</option>
+<option>Fashion</option>
+<option>Appliances</option>
+<option>Home</option>
+</select>
+
+<div id="products" class="grid"></div>
+
+</div>
+
+<div class="panel">
+
+<h3>Cart</h3>
+
+<div id="cart"></div>
+
+<form id="checkoutForm" class="stack">
+
+<select name="paymentMethod" required>
+<option value="">Payment method</option>
+<option>Telebirr</option>
+<option>CBE Birr</option>
+<option>Cash on Delivery</option>
+</select>
+
+<input name="address" placeholder="Delivery address" required>
+
+<button>Checkout</button>
+
+</form>
+
+</div>
+
+<div class="panel hidden" id="sellerPanel">
+
+<h3>Seller Dashboard</h3>
+
+<form id="productForm" class="stack">
+
+<input name="name" placeholder="Product name" required>
+
+<input name="description" placeholder="Description" required>
+
+<input name="price" type="number" min="1" placeholder="Price" required>
+
+<input name="stock" type="number" min="0" placeholder="Stock" required>
+
+<input name="category" placeholder="Category" required>
+
+<input name="city" placeholder="City" required>
+
+<input name="image" placeholder="Emoji">
+
+<button>Add Product</button>
+
+</form>
+
+</div>
+
+<div class="panel hidden" id="adminPanel">
+
+<h3>Admin Metrics</h3>
+
+<pre id="metrics"></pre>
+
+</div>
+
+<div class="panel">
+
+<h3>Featured Products</h3>
+
+<div id="featuredProducts" class="grid"></div>
+
+</div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+
+const API="/api"
+
+const state={
+token:localStorage.getItem("token")||"",
+user:JSON.parse(localStorage.getItem("user")||"null"),
+products:[],
+cart:[]
+}
+
+const el={
+products:document.getElementById("products"),
+featured:document.getElementById("featuredProducts"),
+cart:document.getElementById("cart"),
+toast:document.getElementById("toast"),
+userBadge:document.getElementById("userBadge"),
+logoutBtn:document.getElementById("logoutBtn"),
+sellerPanel:document.getElementById("sellerPanel"),
+adminPanel:document.getElementById("adminPanel"),
+metrics:document.getElementById("metrics")
+}
+
+
+function notify(msg){
+el.toast.textContent=msg
+el.toast.style.display="block"
+setTimeout(()=>el.toast.style.display="none",2000)
+}
+
+async function api(path,opt={}){
+
+const headers={"Content-Type":"application/json"}
+
+if(state.token)
+headers.Authorization="Bearer "+state.token
+
+const res=await fetch(API+path,{...opt,headers})
+
+const data=await res.json()
+
+if(!res.ok)throw new Error(data.error||"Error")
+
+return data
+}
+
+
+function syncUI(){
+
+if(state.user){
+
+el.userBadge.textContent=state.user.name+" ("+state.user.role+")"
+
+el.logoutBtn.classList.remove("hidden")
+
+if(state.user.role==="seller"||state.user.role==="admin")
+el.sellerPanel.classList.remove("hidden")
+
+if(state.user.role==="admin")
+el.adminPanel.classList.remove("hidden")
+
+}
+
+}
+
+
+function createCard(product){
+
+const card=document.createElement("div")
+card.className="card"
+
+const img=document.createElement("div")
+img.textContent=product.image||"📦"
+
+const title=document.createElement("h4")
+title.textContent=product.name
+
+const price=document.createElement("div")
+price.className="price"
+price.textContent="ETB "+product.price
+
+const btn=document.createElement("button")
+btn.textContent="Add to cart"
+
+btn.onclick=()=>addToCart(product.id)
+
+card.appendChild(img)
+card.appendChild(title)
+card.appendChild(price)
+card.appendChild(btn)
+
+return card
+
+}
+
+
+async function loadProducts(){
+
+const data=await api("/products")
+
+state.products=data.items
+
+el.products.innerHTML=""
+
+state.products.forEach(p=>{
+
+el.products.appendChild(createCard(p))
+
+})
+
+}
+
+
+async function loadFeatured(){
+
+const data=await api("/products/featured")
+
+el.featured.innerHTML=""
+
+data.forEach(p=>{
+
+el.featured.appendChild(createCard(p))
+
+})
+
+}
+
+
+async function addToCart(id){
+
+if(!state.user)return notify("Login first")
+
+await api("/cart/items",{method:"POST",body:JSON.stringify({productId:id,quantity:1})})
+
+notify("Added to cart")
+
+loadCart()
+
+}
+
+
+async function loadCart(){
+
+if(!state.user)return
+
+const data=await api("/cart")
+
+state.cart=data.items
+
+el.cart.innerHTML=""
+
+state.cart.forEach(item=>{
+
+const row=document.createElement("div")
+
+row.className="cart-item"
+
+const name=document.createElement("span")
+name.textContent=item.name+" x "+item.quantity
+
+const remove=document.createElement("button")
+remove.textContent="Remove"
+
+remove.onclick=async()=>{
+
+await api("/cart/items/"+item.product_id,{method:"DELETE"})
+
+loadCart()
+
+}
+
+row.appendChild(name)
+row.appendChild(remove)
+
+el.cart.appendChild(row)
+
+})
+
+}
+
+
+document.getElementById("loginForm").onsubmit=async e=>{
+
+e.preventDefault()
+
+const fd=new FormData(e.target)
+
+const data=await api("/auth/login",{method:"POST",body:JSON.stringify(Object.fromEntries(fd))})
+
+state.token=data.token
+state.user=data.user
+
+localStorage.setItem("token",state.token)
+localStorage.setItem("user",JSON.stringify(state.user))
+
+syncUI()
+
+loadCart()
+
+notify("Welcome "+state.user.name)
+
+}
+
+
+document.getElementById("registerForm").onsubmit=async e=>{
+
+e.preventDefault()
+
+const fd=new FormData(e.target)
+
+await api("/auth/register",{method:"POST",body:JSON.stringify(Object.fromEntries(fd))})
+
+notify("Registered successfully")
+
+}
+
+
+document.getElementById("checkoutForm").onsubmit=async e=>{
+
+e.preventDefault()
+
+const fd=new FormData(e.target)
+
+await api("/orders/checkout",{method:"POST",body:JSON.stringify(Object.fromEntries(fd))})
+
+notify("Order placed")
+
+loadCart()
+
+}
+
+
+document.getElementById("productForm").onsubmit=async e=>{
+
+e.preventDefault()
+
+const fd=new FormData(e.target)
+
+await api("/products",{method:"POST",body:JSON.stringify(Object.fromEntries(fd))})
+
+notify("Product created")
+
+loadProducts()
+
+}
+
+
+document.getElementById("logoutBtn").onclick=()=>{
+
+localStorage.clear()
+
+location.reload()
+
+}
+
+
+syncUI()
+
+loadProducts()
+
+loadFeatured()
+
+loadCart()
+
+</script>
+
+</body>
+</html>
