@@ -1,410 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EthioGebeya UltraScale</title>
-  <style>
-    /* ---------- ROOT COLORS ---------- */
-    :root {
-      --green: #177245;
-      --yellow: #f2c037;
-      --bg: #f4f7f5;
-      --ink: #1f2937;
-      --danger: #b91c1c;
-      --light: #ffffff;
-      --shadow: rgba(0, 0, 0, 0.07);
-    }
-
-    /* ---------- GLOBAL ---------- */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-
-    /* ---------- HERO ---------- */
-    .hero {
-      background: linear-gradient(135deg, rgba(23,114,69,0.95), rgba(18,35,26,0.95));
-      color: #fff;
-      padding: 2rem 1rem 4rem;
-    }
-    .hero h1 span { color: var(--yellow); }
-    .hero-body { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
-
-    /* ---------- NAV ---------- */
-    .nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
-    .nav h1 { font-size: 1.6rem; }
-    .auth-strip { display: flex; align-items: center; gap: 0.5rem; }
-
-    /* ---------- CHIPS ---------- */
-    .chips span {
-      display: inline-block;
-      background: rgba(255,255,255,0.15);
-      padding: 0.3rem 0.6rem;
-      border-radius: 999px;
-      margin-right: 0.4rem;
-      margin-top: 0.6rem;
-      font-size: 0.85rem;
-    }
-
-    /* ---------- PANEL ---------- */
-    .panel {
-      background: var(--light);
-      border-radius: 0.9rem;
-      padding: 1rem;
-      box-shadow: 0 8px 20px var(--shadow);
-      margin-bottom: 1.5rem;
-    }
-    .panel.wide { grid-column: span 2; }
-
-    /* ---------- FORMS ---------- */
-    .stack { display: grid; gap: 0.8rem; margin-bottom: 1rem; }
-    input, select, button {
-      padding: 0.65rem 0.8rem;
-      border-radius: 0.55rem;
-      border: 1px solid #d1d5db;
-      font-size: 0.95rem;
-    }
-    button { background: var(--green); color: #fff; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    button:hover { opacity: 0.9; }
-    button.ghost { background: #e5e7eb; color: #111827; }
-
-    /* ---------- GRID LAYOUT ---------- */
-    .layout { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 1rem; margin: 1rem auto 2rem; align-items: start; }
-    .row, .row-between { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
-    .row-between { justify-content: space-between; }
-
-    /* ---------- PRODUCT GRID ---------- */
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
-    .card {
-      border: 1px solid #e5e7eb;
-      border-radius: 0.8rem;
-      padding: 1rem;
-      background: var(--light);
-      box-shadow: 0 4px 10px var(--shadow);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .card h4, .card h3 { margin: 0.5rem 0; }
-    .card .meta { font-size: 0.9rem; color: #4b5563; }
-    .card .price { color: var(--green); font-weight: 700; margin: 0.3rem 0; }
-    .card .buy { width: 100%; margin-top: 0.5rem; }
-
-    /* ---------- CART ---------- */
-    #cart .cart-item {
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #eee;
-      padding: 0.4rem 0;
-    }
-
-    /* ---------- TOAST ---------- */
-    #toast {
-      position: fixed;
-      right: 1rem; bottom: 1rem;
-      background: #111827; color: #fff;
-      padding: 0.6rem 0.8rem;
-      border-radius: 0.6rem;
-      display: none;
-      z-index: 1000;
-    }
-    .warn { color: var(--danger); font-weight: 600; }
-
-    /* ---------- CODE BLOCK ---------- */
-    code { background: rgba(0,0,0,0.08); padding: 0.1rem 0.3rem; border-radius: 0.3rem; }
-    pre { background: #0f172a; color: #86efac; padding: 0.7rem; border-radius: 0.6rem; overflow: auto; }
-
-    /* ---------- HERO CONTENT ---------- */
-    .hero-content { margin-top: 2rem; max-width: 600px; }
-    .hero-content h2 { font-size: 2.2rem; margin-bottom: 0.75rem; }
-    .hero-content button { background: var(--yellow); border: none; padding: 0.75rem 1.4rem; border-radius: 0.5rem; font-weight: bold; margin-top: 1rem; cursor: pointer; }
-
-    /* ---------- HIGHLIGHTS ---------- */
-    .highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
-    .highlights article { background: var(--light); padding: 1rem; border-radius: 0.75rem; box-shadow: 0 4px 10px var(--shadow); }
-
-    /* ---------- FOOTER ---------- */
-    footer { text-align: center; padding: 1.5rem; color: #374151; font-size: 0.9rem; }
-
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 1040px) {
-      .layout, .hero-body { grid-template-columns: 1fr; }
-      .panel.wide { grid-column: span 1; }
-      .hero { padding: 2rem 1rem 3rem; }
-    }
-    @media (max-width: 600px) {
-      .hero-content h2 { font-size: 1.7rem; }
-      .product-grid, .highlights { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EthioGebeya UltraScale</title>
+<style>
+  :root {
+    --green:#177245;
+    --yellow:#f2c037;
+    --bg:#f4f7f5;
+    --ink:#1f2937;
+    --danger:#b91c1c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--ink);}
+  .container{max-width:1200px;margin:0 auto;padding:0 1rem;}
+  .hero{background:linear-gradient(135deg,rgba(23,114,69,0.95),rgba(18,35,26,0.95));color:#fff;padding-bottom:2rem;}
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;}
+  .nav h1 span{color:var(--yellow);}
+  .auth-strip{display:flex;gap:.5rem;align-items:center;}
+  .hero-body{display:grid;grid-template-columns:1.4fr 1fr;gap:1rem;padding:1rem 0;}
+  .chips span{display:inline-block;background:rgba(255,255,255,.15);padding:.3rem .6rem;border-radius:999px;margin-right:.4rem;margin-top:.6rem;}
+  .layout{display:grid;grid-template-columns:1fr 2fr 1fr;gap:1rem;margin:1rem auto 2rem;align-items:start;}
+  .panel{background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 8px 20px rgba(0,0,0,.07);}
+  .panel.wide{grid-column:span 1;}
+  .row,.row-between{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;}
+  .row-between{justify-content:space-between;}
+  .stack{display:grid;gap:.5rem;margin-bottom:1rem;}
+  input,select,button{padding:.65rem .7rem;border-radius:.55rem;border:1px solid #d1d5db;}
+  button{border:none;background:var(--green);color:#fff;font-weight:600;cursor:pointer;}
+  button.ghost{background:#e5e7eb;color:#111827;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem;}
+  .card{border:1px solid #e5e7eb;border-radius:.8rem;padding:.8rem;}
+  .card h4,.card h3{margin:.4rem 0;}
+  .card .meta{color:#4b5563;font-size:.9rem;}
+  .price{color:var(--green);font-weight:700;}
+  .card .buy{width:100%;margin-top:.5rem;}
+  #cart .cart-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding:.4rem 0;}
+  #toast{position:fixed;right:1rem;bottom:1rem;background:#111827;color:#fff;padding:.6rem .8rem;border-radius:.6rem;display:none;}
+  .warn{color:var(--danger);font-weight:600;}
+  footer{text-align:center;padding:1.5rem;color:#374151;}
+  @media(max-width:1040px){.layout{grid-template-columns:1fr}.hero-body{grid-template-columns:1fr}}
+</style>
 </head>
-
 <body>
-  <!-- HERO SECTION -->
-  <header class="hero">
-    <div class="container nav">
-      <h1>EthioGebeya <span>UltraScale</span></h1>
-      <div class="auth-strip">
-        <span id="userBadge">Guest</span>
-        <button id="logoutBtn" class="ghost" hidden>Logout</button>
+
+<header class="hero">
+  <div class="container nav">
+    <h1>EthioGebeya <span>UltraScale</span></h1>
+    <div class="auth-strip">
+      <span id="userBadge">Guest</span>
+      <button id="logoutBtn" class="ghost" hidden>Logout</button>
+    </div>
+  </div>
+  <div class="container hero-body">
+    <div>
+      <h2>Secure Ethiopian Marketplace Platform</h2>
+      <p>Multi-vendor commerce with role-based dashboards, protected checkout, and local payment options.</p>
+      <div class="chips">
+        <span>Telebirr</span>
+        <span>CBE Birr</span>
+        <span>Cash on Delivery</span>
       </div>
     </div>
-
-    <div class="container hero-body">
-      <div>
-        <h2>Secure Ethiopian Marketplace Platform</h2>
-        <p>Multi-vendor commerce with role-based dashboards, protected checkout, and local payment options.</p>
-        <div class="chips">
-          <span>Telebirr</span>
-          <span>CBE Birr</span>
-          <span>Cash on Delivery</span>
-        </div>
-      </div>
-      <div class="panel credentials">
-        <h3>Demo Accounts</h3>
-        <p>Admin: <code>admin@ethiogebeya.com / Admin@123</code></p>
-        <p>Seller: <code>seller@ethiogebeya.com / Seller@123</code></p>
-        <p>Customer: <code>customer@ethiogebeya.com / Customer@123</code></p>
-      </div>
+    <div class="panel credentials">
+      <h3>Demo Accounts</h3>
+      <p>Admin: <code>admin@ethiogebeya.com / Admin@123</code></p>
+      <p>Seller: <code>seller@ethiogebeya.com / Seller@123</code></p>
+      <p>Customer: <code>customer@ethiogebeya.com / Customer@123</code></p>
     </div>
+  </div>
+</header>
 
-    <div class="hero-content">
-      <h2>Your Ethiopian Mini Amazon</h2>
-      <p>Discover local products from trusted Ethiopian sellers with fast delivery and Telebirr/CBE Birr support.</p>
-      <button id="startShoppingBtn">Start Shopping</button>
-    </div>
-  </header>
+<main class="container layout">
+  <section class="panel">
+    <h3>Authentication</h3>
+    <form id="registerForm" class="stack">
+      <h4>Register</h4>
+      <input name="name" placeholder="Full name" required>
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="password" type="password" placeholder="Password (8+ chars)" required minlength="8">
+      <select name="role">
+        <option value="customer">Customer</option>
+        <option value="seller">Seller</option>
+      </select>
+      <button>Create account</button>
+    </form>
+    <form id="loginForm" class="stack">
+      <h4>Login</h4>
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="password" type="password" placeholder="Password" required>
+      <button>Login</button>
+    </form>
+  </section>
 
-  <!-- MAIN LAYOUT -->
-  <main class="container layout">
-
-    <!-- AUTH PANEL -->
-    <section class="panel">
-      <h3>Authentication</h3>
-      <form id="registerForm" class="stack">
-        <h4>Register</h4>
-        <input name="name" placeholder="Full name" required />
-        <input name="email" type="email" placeholder="Email" required />
-        <input name="password" type="password" placeholder="Password (8+ chars)" required minlength="8" />
-        <select name="role">
-          <option value="customer">Customer</option>
-          <option value="seller">Seller</option>
+  <section class="panel wide">
+    <div class="row-between">
+      <h3>Products</h3>
+      <div class="row">
+        <input id="searchInput" placeholder="Search products">
+        <select id="categoryFilter">
+          <option value="">All categories</option>
+          <option>Grocery</option>
+          <option>Fashion</option>
+          <option>Appliances</option>
+          <option>Home</option>
         </select>
-        <button>Create account</button>
-      </form>
-      <form id="loginForm" class="stack">
-        <h4>Login</h4>
-        <input name="email" type="email" placeholder="Email" required />
-        <input name="password" type="password" placeholder="Password" required />
-        <button>Login</button>
-      </form>
-    </section>
-
-    <!-- PRODUCTS PANEL -->
-    <section class="panel wide">
-      <div class="row-between">
-        <h3>Products</h3>
-        <div class="row">
-          <input id="searchInput" placeholder="Search products" />
-          <select id="categoryFilter">
-            <option value="">All categories</option>
-            <option>Grocery</option>
-            <option>Fashion</option>
-            <option>Appliances</option>
-            <option>Home</option>
-          </select>
-          <button id="reloadProducts" class="ghost">Refresh</button>
-        </div>
+        <button id="reloadProducts" class="ghost">Refresh</button>
       </div>
-      <div id="products" class="product-grid"></div>
-    </section>
+    </div>
+    <div id="products" class="grid"></div>
+  </section>
 
-    <!-- CART PANEL -->
-    <section class="panel">
-      <h3>Cart & Checkout</h3>
-      <div id="cart"></div>
-      <form id="checkoutForm" class="stack">
-        <select name="paymentMethod" required>
-          <option value="">Payment method</option>
-          <option>Telebirr</option>
-          <option>CBE Birr</option>
-          <option>Cash on Delivery</option>
-        </select>
-        <input name="address" placeholder="Delivery address" required />
-        <button>Checkout</button>
-      </form>
-    </section>
+  <section class="panel">
+    <h3>Cart & Checkout</h3>
+    <div id="cart"></div>
+    <form id="checkoutForm" class="stack">
+      <select name="paymentMethod" required>
+        <option value="">Payment method</option>
+        <option>Telebirr</option>
+        <option>CBE Birr</option>
+        <option>Cash on Delivery</option>
+      </select>
+      <input name="address" placeholder="Delivery address" required>
+      <button>Checkout</button>
+    </form>
+  </section>
 
-    <!-- SELLER PANEL -->
-    <section class="panel" id="sellerPanel" hidden>
-      <h3>Seller Dashboard</h3>
-      <form id="productForm" class="stack">
-        <input name="name" placeholder="Product name" required />
-        <input name="description" placeholder="Description" required />
-        <input name="price" type="number" min="1" placeholder="Price" required />
-        <input name="stock" type="number" min="0" placeholder="Stock" required />
-        <input name="category" placeholder="Category" required />
-        <input name="city" placeholder="City" required />
-        <input name="image" placeholder="Emoji" maxlength="2" />
-        <button>Add Product</button>
-      </form>
-      <div id="sellerOrders"></div>
-    </section>
+  <section class="panel" id="sellerPanel" hidden>
+    <h3>Seller Dashboard</h3>
+    <form id="productForm" class="stack">
+      <input name="name" placeholder="Product name" required>
+      <input name="description" placeholder="Description" required>
+      <input name="price" type="number" min="1" placeholder="Price" required>
+      <input name="stock" type="number" min="0" placeholder="Stock" required>
+      <input name="category" placeholder="Category" required>
+      <input name="city" placeholder="City" required>
+      <input name="image" placeholder="Emoji" maxlength="2">
+      <button>Add Product</button>
+    </form>
+    <div id="sellerOrders"></div>
+  </section>
 
-    <!-- ADMIN PANEL -->
-    <section class="panel" id="adminPanel" hidden>
-      <h3>Admin Metrics</h3>
-      <pre id="metrics"></pre>
-    </section>
+  <section class="panel" id="adminPanel" hidden>
+    <h3>Admin Metrics</h3>
+    <pre id="metrics"></pre>
+  </section>
 
-    <!-- FEATURED PRODUCTS -->
-    <section class="panel wide">
-      <h3>Featured Products</h3>
-      <div id="featuredProducts" class="product-grid"></div>
-    </section>
+  <section class="panel wide">
+    <h3>Featured Products</h3>
+    <div id="featuredProducts" class="grid"></div>
+  </section>
+</main>
 
-  </main>
+<footer>
+  <p>© 2026 EthioGebeya. Built for Ethiopian commerce.</p>
+</footer>
+<div id="toast"></div>
 
-  <div id="toast"></div>
+<script>
+const state={token:localStorage.getItem("token")||"",user:JSON.parse(localStorage.getItem("user")||"null"),products:[],cart:[],featured:[]};
+const el={products:document.getElementById("products"),featuredProducts:document.getElementById("featuredProducts"),cart:document.getElementById("cart"),registerForm:document.getElementById("registerForm"),loginForm:document.getElementById("loginForm"),checkoutForm:document.getElementById("checkoutForm"),productForm:document.getElementById("productForm"),sellerPanel:document.getElementById("sellerPanel"),sellerOrders:document.getElementById("sellerOrders"),adminPanel:document.getElementById("adminPanel"),metrics:document.getElementById("metrics"),toast:document.getElementById("toast"),userBadge:document.getElementById("userBadge"),logoutBtn:document.getElementById("logoutBtn"),searchInput:document.getElementById("searchInput"),categoryFilter:document.getElementById("categoryFilter"),reloadProducts:document.getElementById("reloadProducts")};
 
-  <footer>
-    <p>© 2026 EthioGebeya. Built for Ethiopian commerce.</p>
-  </footer>
+function notify(msg,isError=false){el.toast.textContent=msg;el.toast.style.display="block";el.toast.className=isError?"warn":"";setTimeout(()=>el.toast.style.display="none",2200);}
+async function api(path,options={}){const headers={"Content-Type":"application/json",...(options.headers||{})};if(state.token)headers.Authorization=`Bearer ${state.token}`;const resp=await fetch(path,{...options,headers});const data=await resp.json();if(!resp.ok)throw new Error(data.error||"Request failed");return data;}
+function syncAuthUI(){const u=state.user;el.userBadge.textContent=u?`${u.name} (${u.role})`:"Guest";el.logoutBtn.hidden=!u;el.sellerPanel.hidden=!(u&&["seller","admin"].includes(u.role));el.adminPanel.hidden=!(u&&u.role==="admin");}
+function saveAuth(token,user){state.token=token;state.user=user;localStorage.setItem("token",token);localStorage.setItem("user",JSON.stringify(user));syncAuthUI();}
+function clearAuth(){state.token="";state.user=null;localStorage.removeItem("token");localStorage.removeItem("user");state.cart=[];renderCart();syncAuthUI();}
+function sanitize(text){const d=document.createElement("div");d.textContent=text;return d.innerHTML;}
+function validateForm(form){for(const f of form.elements){if(f.required&&!f.value.trim())throw new Error(`Field "${f.name}" required`);if(f.type==="email"&&f.value){const r=/\S+@\S+\.\S+/;if(!r.test(f.value))throw new Error("Invalid email");}if(f.type==="number"&&f.value){const n=Number(f.value);if(isNaN(n)||n<(f.min||0))throw new Error(`Invalid value for "${f.name}"`);}}}
 
-  <script>
-    // ---------- STATE ----------
-    const state = {
-      token: localStorage.getItem("token") || "",
-      user: JSON.parse(localStorage.getItem("user") || "null"),
-      products: [],
-      cart: [],
-      featured: []
-    };
+function renderProducts(){el.products.innerHTML="";state.products.forEach(p=>{const card=document.createElement("article");card.className="card";const img=document.createElement("div");img.textContent=p.image||"📦";card.appendChild(img);const name=document.createElement("h4");name.innerHTML=sanitize(p.name);card.appendChild(name);const price=document.createElement("div");price.className="price";price.textContent=`ETB ${Number(p.price).toLocaleString()}`;card.appendChild(price);const meta=document.createElement("div");meta.className="meta";meta.textContent=`${sanitize(p.category)} • ${sanitize(p.city)}`;card.appendChild(meta);const stock=document.createElement("div");stock.className="meta";stock.textContent=`Stock: ${p.stock}`;card.appendChild(stock);const btn=document.createElement("button");btn.className="buy";btn.dataset.id=p.id;btn.textContent="Add to Cart";btn.addEventListener("click",async()=>{if(!state.user)return notify("Please login first",true);try{await api("/api/cart/items",{method:"POST",body:JSON.stringify({productId:p.id,quantity:1})});await loadCart();notify("Added to cart");}catch(e){notify(e.message,true);}});card.appendChild(btn);el.products.appendChild(card);});}
 
-    // ---------- ELEMENTS ----------
-    const el = {
-      products: document.getElementById("products"),
-      featuredProducts: document.getElementById("featuredProducts"),
-      cart: document.getElementById("cart"),
-      registerForm: document.getElementById("registerForm"),
-      loginForm: document.getElementById("loginForm"),
-      checkoutForm: document.getElementById("checkoutForm"),
-      productForm: document.getElementById("productForm"),
-      sellerPanel: document.getElementById("sellerPanel"),
-      sellerOrders: document.getElementById("sellerOrders"),
-      adminPanel: document.getElementById("adminPanel"),
-      metrics: document.getElementById("metrics"),
-      toast: document.getElementById("toast"),
-      userBadge: document.getElementById("userBadge"),
-      logoutBtn: document.getElementById("logoutBtn"),
-      searchInput: document.getElementById("searchInput"),
-      categoryFilter: document.getElementById("categoryFilter"),
-      reloadProducts: document.getElementById("reloadProducts")
-    };
+function renderFeatured(){el.featuredProducts.innerHTML="";state.featured.forEach(p=>{const card=document.createElement("article");card.className="card";const img=document.createElement("div");img.textContent=p.image||"📦";card.appendChild(img);const name=document.createElement("h4");name.innerHTML=sanitize(p.name);card.appendChild(name);const price=document.createElement("div");price.className="price";price.textContent=`ETB ${Number(p.price).toLocaleString()}`;card.appendChild(price);const meta=document.createElement("div");meta.className="meta";meta.textContent=`${sanitize(p.category)} • ${sanitize(p.city)}`;card.appendChild(meta);const rating=document.createElement("p");rating.className="meta";rating.textContent=`⭐ ${p.rating||0}`;card.appendChild(rating);el.featuredProducts.appendChild(card);});}
 
-    // ---------- NOTIFY ----------
-    function notify(msg, isError=false){
-      el.toast.textContent = msg;
-      el.toast.style.display = "block";
-      el.toast.className = isError ? "warn" : "";
-      setTimeout(()=>el.toast.style.display="none", 2200);
-    }
+function renderCart(){el.cart.innerHTML="";if(!state.user){el.cart.innerHTML="<p>Login to manage your cart.</p>";return;}if(!state.cart.length){el.cart.innerHTML="<p>Cart is empty.</p>";return;}state.cart.forEach(item=>{const div=document.createElement("div");div.className="cart-item";const span=document.createElement("span");span.textContent=`${sanitize(item.product.name)} x ${item.quantity}`;div.appendChild(span);const btn=document.createElement("button");btn.className="ghost";btn.dataset.remove=item.productId;btn.textContent="Remove";btn.addEventListener("click",async()=>{try{await api(`/api/cart/items/${btn.dataset.remove}`,{method:"DELETE"});await loadCart();}catch(e){notify(e.message,true);}});div.appendChild(btn);el.cart.appendChild(div);});}
 
-    // ---------- API ----------
-    async function api(path, options={}){
-      const headers = { "Content-Type": "application/json", ...(options.headers||{}) };
-      if(state.token) headers.Authorization = `Bearer ${state.token}`;
-      const resp = await fetch(path, {...options, headers});
-      const data = await resp.json();
-      if(!resp.ok) throw new Error(data.error || "Request failed");
-      return data;
-    }
+async function loadProducts(){try{const params=new URLSearchParams();if(el.searchInput.value)params.set("search",el.searchInput.value);if(el.categoryFilter.value)params.set("category",el.categoryFilter.value);const data=await api(`/api/products?${params.toString()}`);state.products=data.items||[];renderProducts();}catch(e){notify(e.message,true);}}
+async function loadFeatured(){try{const data=await api("/api/featured-products");state.featured=data.items||[];renderFeatured();}catch(e){notify(e.message,true);}}
+async function loadCart(){if(!state.user)return;try{const data=await api("/api/cart");state.cart=data.items||[];renderCart();}catch(e){notify(e.message,true);}}
 
-    // ---------- AUTH ----------
-    function syncAuthUI(){
-      const user = state.user;
-      el.userBadge.textContent = user ? `${user.name} (${user.role})` : "Guest";
-      el.logoutBtn.hidden = !user;
-      el.sellerPanel.hidden = !(user && (user.role==="seller" || user.role==="admin"));
-      el.adminPanel.hidden = !(user && user.role==="admin");
-    }
+el.registerForm.addEventListener("submit",async e=>{e.preventDefault();try{validateForm(el.registerForm);const fd=new FormData(el.registerForm);await api("/api/auth/register",{method:"POST",body:JSON.stringify(Object.fromEntries(fd.entries()))});notify("Registered successfully. Please login.");el.registerForm.reset();}catch(err){notify(err.message,true);}});
 
-    function saveAuth(token, user){
-      state.token = token;
-      state.user = user;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      syncAuthUI();
-    }
+el.loginForm.addEventListener("submit",async e=>{e.preventDefault();try{validateForm(el.loginForm);const fd=new FormData(el.loginForm);const data=await api("/api/auth/login",{method:"POST",body:JSON.stringify(Object.fromEntries(fd.entries()))});saveAuth(data.token,data.user);notify(`Welcome ${data.user.name}`);await loadCart();await loadProducts();await loadFeatured();}catch(err){notify(err.message,true);}});
 
-    function clearAuth(){
-      state.token = "";
-      state.user = null;
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      state.cart = [];
-      renderCart();
-      syncAuthUI();
-    }
+el.checkoutForm.addEventListener("submit",async e=>{e.preventDefault();try{validateForm(el.checkoutForm);const fd=new FormData(el.checkoutForm);const data=await api("/api/orders/checkout",{method:"POST",body:JSON.stringify(Object.fromEntries(fd.entries()))});notify(`Order ${data.order.id.slice(0,8)} confirmed`);el.checkoutForm.reset();await loadCart();await loadProducts();await loadFeatured();}catch(err){notify(err.message,true);}});
 
-    // ---------- RENDER ----------
-    function renderProducts(){
-      el.products.innerHTML = state.products.map(p => `
-        <article class="card">
-          <div>${p.image || "📦"}</div>
-          <h4>${p.name}</h4>
-          <div class="price">ETB ${p.price.toLocaleString()}</div>
-          <div class="meta">${p.category} • ${p.city}</div>
-          <div class="meta">Stock: ${p.stock}</div>
-          <button class="buy" data-id="${p.id}">Add to Cart</button>
-        </article>
-      `).join("");
+el.productForm.addEventListener("submit",async e=>{e.preventDefault();try{validateForm(el.productForm);const fd=new FormData(el.productForm);await api("/api/seller/products",{method:"POST",body:JSON.stringify(Object.fromEntries(fd.entries()))});notify("Product created");el.productForm.reset();await loadProducts();await loadFeatured();}catch(err){notify(err.message,true);}});
 
-      Array.from(el.products.querySelectorAll("button.buy")).forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          if(!state.user) return notify("Please login first", true);
-          try{
-            await api("/api/cart/items",{method:"POST", body:JSON.stringify({productId: btn.dataset.id, quantity:1})});
-            await loadCart();
-            notify("Added to cart");
-          }catch(e){ notify(e.message,true); }
-        });
-      });
-    }
+el.logoutBtn.addEventListener("click",clearAuth);
+el.reloadProducts.addEventListener("click",loadProducts);
+el.searchInput.addEventListener("input",()=>loadProducts());
+el.categoryFilter.addEventListener("change",()=>loadProducts());
 
-    function renderFeatured(){
-      el.featuredProducts.innerHTML = state.featured.map(p => `
-        <article class="card">
-          <div>${p.image || "📦"}</div>
-          <h4>${p.name}</h4>
-          <div class="price">ETB ${p.price.toLocaleString()}</div>
-          <div class="meta">${p.category} • ${p.city}</div>
-          <p class="meta">⭐ ${p.rating||0}</p>
-        </article>
-      `).join("");
-    }
+syncAuthUI();
+loadProducts();
+loadCart();
+loadFeatured();
+</script>
 
-    function renderCart(){
-      if(!state.user){ el.cart.innerHTML="<p>Login to manage your cart.</p>"; return; }
-      if(!state.cart.length){ el.cart.innerHTML="<p>Cart is empty.</p>"; return; }
-      el.cart.innerHTML = state.cart.map(item=>`
-        <div class="cart-item">
-          <span>${item.product.name} x ${item.quantity}</span>
-          <button class="ghost" data-remove="${item.productId}">Remove</button>
-        </div>
-      `).join("");
-      Array.from(el.cart.querySelectorAll("button[data-remove]")).forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          try{
-            await api(`/api/cart/items/${btn.dataset.remove}`, {method:"DELETE"});
-            await loadCart();
-          }catch(e){ notify(e.message,true); }
-        });
-      });
-    }
-
-    // ---------- LOAD DATA ----------
-    async function loadProducts(){
-      try{
-        const params = new URLSearchParams();
-        if(el.searchInput.value) params.set("search", el.searchInput.value);
-        if(el.categoryFilter.value
+</body>
+</html>
